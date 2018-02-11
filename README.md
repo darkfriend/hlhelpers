@@ -1,9 +1,30 @@
 # HLHelpers
 Набор методов для работы с highloadblock 1С-Битрикс
 
+Содержание
+----
+
+* Работа с HighloadBlockTable
+    + [Создать HighloadBlockTable](#CreateHighloadBlock)
+    + [Добавить поле в HighloadBlockTable](#AddFieldHighloadBlock)
+    + [Удалить HighloadBlockTable](#DeleteHighloadBlock)
+* Работа с элементами
+    + [Получить все highloadblock](#ListHighloadBlock)
+    + [Получить все элементы](#ListElements)
+    + [Добавить новый элемент](#AddElement)
+    + [Обновить элемент](#UpdateElement)
+    + [Удалить элемент](#DelElement)
+* Работа с полем вида список
+    + [Получить все значения списка](#GetValuesFieldList)
+    + [Получить 1 значение списка](#GetValueFieldList)
+    + [Получить 1 значение списка по его XML_ID](#GetValueFieldListByXmlId)
+* [Гибкость в работе с HighloadBlock](#FlexHighloadBlock)
+* [Гибкость в работа с полем "список"](#FlexFieldValuesList)
+
+
 ## Как пользоваться?
 
-### Создать HighloadBlockTable
+### <a name="CreateHighloadBlock"></a> Создать HighloadBlockTable
 
 ```php
 <?php
@@ -17,7 +38,7 @@
 ?>
 ```
 
-### Добавить поле в HighloadBlockTable
+### <a name="AddFieldHighloadBlock"></a> Добавить поле в HighloadBlockTable
 
 ```php
 <?php
@@ -49,7 +70,7 @@
 ?>
 ```
 
-### Удалить HighloadBlockTable
+### <a name="DeleteHighloadBlock"></a> Удалить HighloadBlockTable
 
 ```php
 <?php
@@ -60,7 +81,7 @@
 ?>
 ```
 
-### Получить все highloadblock
+### <a name="ListHighloadBlock"></a> Получить все highloadblock
 
 ```php
 <?php 
@@ -70,7 +91,7 @@
 ?>
  ```
  
-### Получить все элементы highloadblock
+### <a name="ListElements"></a> Получить все элементы highloadblock
 
 ```php
 <?php 
@@ -82,7 +103,7 @@
 ?>
 ```
   
-### Добавить новый элемент в highloadblock
+### <a name="AddElement"></a> Добавить новый элемент в highloadblock
 
 ```php
 <?php 
@@ -100,7 +121,7 @@
 ?>
 ```
 
-### Обновить элемент в highloadblock
+### <a name="UpdateElement"></a> Обновить элемент в highloadblock
 
 ```php
 <?php 
@@ -119,7 +140,7 @@
 ?>
 ```
 
-### Удалить элемент из highloadblock
+### <a name="DelElement"></a> Удалить элемент из highloadblock
 
 ```php
 <?php 
@@ -135,7 +156,7 @@
 
 ## Работа с полем вида "список" в highloadblock
 
-### Получить все значения поля список у highloadblock
+### <a name="GetValuesFieldList"></a> Получить все значения поля список у highloadblock
 
 ```php
 <?php 
@@ -147,7 +168,7 @@
 ?>
 ```
 
-### Получить значение списка из highloadblock
+### <a name="GetValueFieldList"></a> Получить значение списка из highloadblock
 
 ```php
 <?php 
@@ -160,7 +181,7 @@
 ?>
 ```
 
-### Получить значение списка по его XML_ID из highloadblock
+### <a name="GetValueFieldListByXmlId"></a> Получить значение списка по его XML_ID из highloadblock
 
 ```php
 <?php 
@@ -173,13 +194,13 @@
 ?>
 ```
 
-## Гибкость в работе с highloadblock
+## <a name="FlexHighloadBlock"></a> Гибкость в работе с highloadblock
 
 Для обеспечения лучшей гибкости использовать:
 * `getEntityTable($hlblockID)`
 * `getElementsResource($hlblockID,$arFilter=[],$arOrder=["ID" => "ASC"],$arSelect=['*'],$arMoreParams=[])`
 
-## Гибкость в работе с полем вида "список" у highloadblock
+## <a name="FlexFieldValuesList"></a> Гибкость в работе с полем вида "список" у highloadblock
 
 Для обеспечения лучшей гибкости использовать:
 * `getFieldValuesList($arSort=['SORT'=>'ASC'],$arFilter=[])`
