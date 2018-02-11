@@ -5,11 +5,11 @@
 ----
 
 * Работа с HighloadBlockTable
+    + [Получить все highloadblock](#ListHighloadBlock)
     + [Создать HighloadBlockTable](#CreateHighloadBlock)
     + [Добавить поле в HighloadBlockTable](#AddFieldHighloadBlock)
     + [Удалить HighloadBlockTable](#DeleteHighloadBlock)
 * Работа с элементами
-    + [Получить все highloadblock](#ListHighloadBlock)
     + [Получить все элементы](#ListElements)
     + [Добавить новый элемент](#AddElement)
     + [Обновить элемент](#UpdateElement)
