@@ -3,19 +3,76 @@
 
 ## Как пользоваться?
 
+### Создать HighloadBlockTable
+
+```php
+<?php
+    use Darkfriend\HLHelpers;
+    $nameHLBlock = 'TestHlBlock';
+    $tableName = 'test_table_hl_block';
+    $id = HLHelpers::getInstance()->create($nameHLBlock,$tableName);
+    print_r($id); // id|false HighloadBlock
+    // если $id === false
+    // print_r(HLHelpers::$LAST_ERROR);
+?>
+```
+
+### Добавить поле в HighloadBlockTable
+
+```php
+<?php
+    use Darkfriend\HLHelpers;
+    $hlblockID = 1;
+    // описание какие данные указывать в $arFields тут https://dev.1c-bitrix.ru/learning/course/?COURSE_ID=43&LESSON_ID=3496
+    $arField = [
+    	'FIELD_NAME' => 'UF_TEST',
+        'USER_TYPE_ID' => 'string',
+        'SORT' => '100',
+        'MULTIPLE' => 'N',
+        'MANDATORY' => 'N',
+        'SETTINGS' => [
+            'DEFAULT_VALUE' => 'empty',
+        ],
+        'EDIT_FORM_LABEL' => [
+            'ru' => 'Тестовое поле',
+            'en' => 'Test field',
+        ],
+        'LIST_COLUMN_LABEL' => [
+            'ru' => 'Тестовое поле',
+            'en' => 'Test field',
+        ],
+    ];
+    $id = HLHelpers::getInstance()->addField($hlblockID,$arField);
+    print_r($id); // id|false поля
+    // если $id === false
+    // print_r(HLHelpers::$LAST_ERROR);
+?>
+```
+
+### Удалить HighloadBlockTable
+
+```php
+<?php
+    use Darkfriend\HLHelpers;
+    $hlblockID = 1;
+    $result = HLHelpers::getInstance()->deleteHighloadBlock($hlblockID);
+    print_r($result);
+?>
+```
+
 ### Получить все highloadblock
 
-```
+```php
 <?php 
- use Darkfriend\HLHelpers;
- $arHL = HLHelpers::getInstance()->getList();
- print_r($arHL);
+    use Darkfriend\HLHelpers;
+    $arHL = HLHelpers::getInstance()->getList();
+    print_r($arHL);
 ?>
  ```
  
 ### Получить все элементы highloadblock
 
-```
+```php
 <?php 
     use Darkfriend\HLHelpers;
     $hlID = 1; // идентификатор highloadblock
@@ -27,7 +84,7 @@
   
 ### Добавить новый элемент в highloadblock
 
-```
+```php
 <?php 
     use Darkfriend\HLHelpers;
     $hlID = 1; // идентификатор highloadblock
@@ -45,7 +102,7 @@
 
 ### Обновить элемент в highloadblock
 
-```
+```php
 <?php 
     use Darkfriend\HLHelpers;
     $hlID = 1; // идентификатор highloadblock
@@ -64,7 +121,7 @@
 
 ### Удалить элемент из highloadblock
 
-```
+```php
 <?php 
     use Darkfriend\HLHelpers;
     $hlID = 1; // идентификатор highloadblock
@@ -80,7 +137,7 @@
 
 ### Получить все значения поля список у highloadblock
 
-```
+```php
 <?php 
     use Darkfriend\HLHelpers;
     $fieldName = "UF_FIELD"; // название поля
@@ -92,7 +149,7 @@
 
 ### Получить значение списка из highloadblock
 
-```
+```php
 <?php 
     use Darkfriend\HLHelpers;
     $fieldName = "UF_FIELD"; // название поля
@@ -105,7 +162,7 @@
 
 ### Получить значение списка по его XML_ID из highloadblock
 
-```
+```php
 <?php 
     use Darkfriend\HLHelpers;
     $fieldName = "UF_FIELD"; // название поля
