@@ -11,8 +11,6 @@ use \Bitrix\Highloadblock as HL,
     \Bitrix\Main\Entity,
     \Bitrix\Main\Loader;
 
-Loader::includeModule('highloadblock');
-
 class HLHelpers {
 
     private static $instance;
@@ -26,6 +24,7 @@ class HLHelpers {
      */
     public static function getInstance() {
         if (!self::$instance) {
+			Loader::includeModule('highloadblock');
             self::$instance = new HLHelpers();
         }
         return self::$instance;
@@ -218,4 +217,55 @@ class HLHelpers {
         if($arResult[0]) return $arResult[0];
         return false;
     }
+
+	/**
+	 * Создает таблицу для HighloadBlock
+	 * @param string $nameHLBlock - название HL-блока, должно начинаться с заглавной буквы и состоять только из латинских букв и цифр
+	 * @param string $tableName - название таблицы для HL-блока, должно состоять только из строчных латинских букв, цифр и знака подчеркивания
+	 * @return bool|int - id HL-блока
+	 */
+	public function create($nameHLBlock,$tableName){
+		$result = HL\HighloadBlockTable::add([
+			'TABLE_NAME' => $tableName,
+			'NAME' => $nameHLBlock,
+		]);
+		$id = false;
+		if (!$result->isSuccess()) {
+			$msg = $result->getErrorMessages();
+			if($msg) $msg = implode(PHP_EOL,$msg);
+			self::$LAST_ERROR = $msg;
+		} else {
+			$id = $result->getId();
+		}
+		return $id;
+	}
+
+	/**
+	 * Добавляет поле в HighloadBlock
+	 * @param integer $hlblockID - идентификатор HighloadBlock
+	 * @param array $arFields - поля, подробности https://dev.1c-bitrix.ru/learning/course/?COURSE_ID=43&LESSON_ID=3496
+	 * @throws $LAST_ERROR
+	 * @return int
+	 */
+	public function addField($hlblockID,$arFields) {
+		global $APPLICATION;
+		$oUserTypeEntity = new \CUserTypeEntity();
+		if(empty($arFields['ENTITY_ID'])) {
+			$arFields['ENTITY_ID'] = 'HLBLOCK_'.$hlblockID;
+		}
+		$id = $oUserTypeEntity->Add($arFields);
+		if(!$id) {
+			self::$LAST_ERROR = $APPLICATION->GetException();
+		}
+		return $id;
+	}
+
+	/**
+	 * Удаляет HighloadBlock по $hlblockID
+	 * @param integer $hlblockID - идентификатор HighloadBlock
+	 * @return \Bitrix\Main\DB\Result|Entity\DeleteResult
+	 */
+	public function deleteHighloadBlock($hlblockID) {
+		return HL\HighloadBlockTable::delete($hlblockID);
+	}
 }
