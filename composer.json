@@ -1,0 +1,21 @@
+{
+    "name": "darkfriend/hlhelpers",
+    "type": "library",
+    "description": "Helper for Highloadblock Bitrix",
+    "keywords": ["dev","helper","darkfriend","highloadblock","highload","bitrix","1c-bitrix","development"],
+    "homepage": "https://github.com/darkfriend/hlhelpers",
+    "authors": [
+        {
+            "name": "darkfriend",
+            "email": "hi@darkfriend.ru"
+        }
+    ],
+    "require": {
+        "php":">=5.4"
+    },
+    "autoload":{
+        "classmap":[
+            "./HLHelpers.php"
+        ]
+    }
+}
