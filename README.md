@@ -3,7 +3,7 @@
 
 Содержание
 ----
-
+* [Как установить](#install)
 * Работа с HighloadBlockTable
     + [Получить все highloadblock](#ListHighloadBlock)
     + [Создать HighloadBlockTable](#CreateHighloadBlock)
@@ -21,6 +21,18 @@
 * [Гибкость в работе с HighloadBlock](#FlexHighloadBlock)
 * [Гибкость в работа с полем "список"](#FlexFieldValuesList)
 
+## <a name="install"></a> Установка
+
+#### Способ 1:
+*  Переходим в папку `/local/php_interface/lib/`
+* `composer require darkfriend/hlhelpers`
+* В файле `/local/php_interface/init.php` пишем ```require __DIR__.'/lib/vendor/autoload.php'```
+* Готово
+
+#### Способ 2:
+*  Копируем репозиторий в папку `/local/php_interface/lib/`
+* В файле `/local/php_interface/init.php` пишем ```require __DIR__.'/lib/hlhelpers/HLHelpers.php'```
+* Готово
 
 ## Как пользоваться?
 
