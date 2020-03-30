@@ -109,6 +109,31 @@ class HLHelpers {
     }
 
     /**
+     * Get one element
+     * @param integer $hlblockID
+     * @param array $arFilter
+     * @param array $arSelect
+     * @param array $arMoreParams
+     * @return array|false
+     */
+    public function getElement($hlblockID, $arFilter=[], $arSelect=['*'], $arMoreParams=[]){
+        if(!$hlblockID) return false;
+        return $this->getElementsResource($hlblockID,$arFilter,[],$arSelect,$arMoreParams)->Fetch();
+    }
+
+    /**
+     * Get one element by ID
+     * @param integer $hlblockID
+     * @param integer $id
+     * @param array $arMoreParams
+     * @return array|false
+     */
+    public function getElementById($hlblockID, $id, $arMoreParams=[]){
+        if(!$hlblockID) return false;
+        return $this->getElement($hlblockID,['ID'=>$id],[],$arMoreParams);
+    }
+
+    /**
      * Создает элемент в хайлоад инфоблоке
      * @param integer $hlblockID - идентификатор таблицы HL
      * @param array $arFields - поля
