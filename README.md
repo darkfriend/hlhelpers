@@ -8,9 +8,11 @@
     + [Получить все highloadblock](#ListHighloadBlock)
     + [Создать HighloadBlockTable](#CreateHighloadBlock)
     + [Добавить поле в HighloadBlockTable](#AddFieldHighloadBlock)
+    + [Удалить поле или поля в HighloadBlockTable](#DeleteFieldHighloadBlock)
     + [Удалить HighloadBlockTable](#DeleteHighloadBlock)
 * Работа с элементами
     + [Получить все элементы](#ListElements)
+    + [Получить количество строк](#CountElements)
     + [Добавить новый элемент](#AddElement)
     + [Обновить элемент](#UpdateElement)
     + [Удалить элемент](#DelElement)
@@ -82,6 +84,20 @@
 ?>
 ```
 
+### <a name="DeleteFieldHighloadBlock"></a> Удалить поле или поля в HighloadBlockTable
+
+```php
+<?php
+    use Darkfriend\HLHelpers;
+    $hlblockID = 1;
+    $result = HLHelpers::getInstance()->removeFields($hlblockID,[
+        'UF_FIELD_1',
+        'UF_FIELD_2',
+    ]);
+    print_r($result); // true|false
+?>
+```
+
 ### <a name="DeleteHighloadBlock"></a> Удалить HighloadBlockTable
 
 ```php
@@ -112,6 +128,18 @@
     
     $arHlElements = HLHelpers::getInstance()->getElementList($hlID);
     print_r($arHlElements);
+?>
+```
+
+### <a name="CountElements"></a> Получить количество строк в highloadblock
+
+```php
+<?php 
+    use Darkfriend\HLHelpers;
+    $hlID = 1; // идентификатор highloadblock
+    $filters = ['UF_FIELD_FIILTER'=>1];
+    $totalElements = HLHelpers::getInstance()->getTotalCount($hlID, $filters);
+    print_r($totalElements);
 ?>
 ```
   

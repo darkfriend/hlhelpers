@@ -3,7 +3,7 @@
  * Набор методов для работы с highloadblock Bitrix
  * User: darkfriend <hi@darkfriend.ru>
  * Date: 25.04.2017
- * @version 1.0.2
+ * @version 1.0.3
  */
 
 namespace Darkfriend;
@@ -11,6 +11,7 @@ namespace Darkfriend;
 use \Bitrix\Highloadblock as HL,
     \Bitrix\Main\Entity,
     \Bitrix\Main\Loader;
+use Bitrix\Main\Application;
 
 class HLHelpers
 {
@@ -46,7 +47,7 @@ class HLHelpers
         if ($arFilter) $arParams['filter'] = $arFilter;
         if ($arMoreParams) {
             foreach ($arMoreParams as $k => $arMoreParam) {
-                $key = mb_strtolower($k);
+                $key = \mb_strtolower($k);
                 $arParams[$key] = $arMoreParam;
             }
         }
@@ -74,7 +75,7 @@ class HLHelpers
      * @param array $arFilter - фильтры
      * @param array $arOrder - сортировка
      * @param array $arSelect - поля, по умолчанию все
-     * @param array $arMoreParams остальные параметры group|limit|offset|count_total|runtime|data_doubling
+     * @param array $arMoreParams остальные параметры group|limit|offset|runtime|data_doubling
      * @return \Bitrix\Main\DB\Result
      */
     public function getElementsResource($hlblockID, $arFilter = [], $arOrder = ["ID" => "ASC"], $arSelect = ['*'], $arMoreParams = [])
@@ -87,7 +88,7 @@ class HLHelpers
         if ($arMoreParams) {
             foreach ($arMoreParams as $k => $arMoreParam) {
                 if (!$arMoreParam) continue;
-                $key = mb_strtolower($k);
+                $key = \mb_strtolower($k);
                 $arParams[$key] = $arMoreParam;
             }
         }
@@ -100,7 +101,7 @@ class HLHelpers
      * @param array $arFilter - фильтры
      * @param array $arOrder - сортировка
      * @param array $arSelect - поля, по умолчанию все
-     * @param array $arMoreParams остальные параметры group|limit|offset|count_total|runtime|data_doubling
+     * @param array $arMoreParams остальные параметры group|limit|offset|runtime|data_doubling
      * @return array|bool
      */
     public function getElementList($hlblockID, $arFilter = [], $arOrder = ["ID" => "ASC"], $arSelect = ['*'], $arMoreParams = [])
@@ -112,6 +113,22 @@ class HLHelpers
             $arResult[] = $arData;
         }
         return $arResult;
+    }
+
+    /**
+     * Возвращает общее кол-во строк
+     * @param int $hlblockID идентификатор таблицы HL
+     * @param array $arFilter фильтры
+     * @param array $cache
+     * @return int
+     * @throws \Bitrix\Main\ObjectPropertyException
+     * @throws \Bitrix\Main\SystemException
+     * @since 1.0.3
+     */
+    public function getTotalCount($hlblockID, $arFilter=[], $cache=[])
+    {
+        $entity = $this->getEntityTable($hlblockID);
+        return (int) $entity::getCount($arFilter, $cache);
     }
 
     /**
@@ -273,7 +290,7 @@ class HLHelpers
         $id = false;
         if (!$result->isSuccess()) {
             $msg = $result->getErrorMessages();
-            if ($msg) $msg = implode(PHP_EOL, $msg);
+            if ($msg) $msg = \implode(\PHP_EOL, $msg);
             self::$LAST_ERROR = $msg;
         } else {
             $id = $result->getId();
@@ -325,5 +342,100 @@ class HLHelpers
     public function deleteHighloadBlock($hlblockID)
     {
         return HL\HighloadBlockTable::delete($hlblockID);
+    }
+
+    /**
+     * Удаляет поля из хайлоадблока
+     * @param int $hlblockID идентификатор таблицы HL
+     * @param array $kFields массив полей к удалению
+     * @return bool
+     * @since 1.0.3
+     * @example \Dev2fun\MultiDomain\HLHelpers::getInstance()
+     *     ->removeFields(
+     *          10,
+     *          ['UF_FIELD_1', 'UF_FIELD_2']
+     *      );
+     */
+    public function removeFields($hlblockID, $kFields)
+    {
+        global $USER_FIELD_MANAGER;
+        if (!$hlblockID) return false;
+
+        // get old data
+        $hlblock = HL\HighloadBlockTable::getById($hlblockID)->fetch();
+
+        $fileFields = [];
+        $fields = $USER_FIELD_MANAGER->getUserFields(HL\HighloadBlockTable::compileEntityId($hlblockID));
+        foreach ($fields as $name => $field) {
+            if(!\in_array($name, $kFields)) continue;
+            if ($field['USER_TYPE']['BASE_TYPE'] === 'file') {
+                $fileFields[] = $name;
+            }
+        }
+
+        // delete files
+        if (!empty($fileFields)) {
+            $oldEntity = HL\HighloadBlockTable::compileEntity($hlblock);
+
+            $query = new Entity\Query($oldEntity);
+
+            // select file ids
+            $query->setSelect($fileFields);
+
+            // if they are not empty
+            $filter = ['LOGIC' => 'OR'];
+
+            foreach ($fileFields as $file_field) {
+                $filter['!' . $file_field] = false;
+            }
+
+            $query->setFilter($filter);
+
+            // go
+            $iterator = $query->exec();
+
+            while ($row = $iterator->fetch()) {
+                foreach ($fileFields as $file_field) {
+                    if (!empty($row[$file_field])) {
+                        if (\is_array($row[$file_field])) {
+                            foreach ($row[$file_field] as $value) {
+                                \CFile::delete($value);
+                            }
+                        } else {
+                            \CFile::delete($row[$file_field]);
+                        }
+                    }
+                }
+            }
+            unset($row, $iterator);
+        }
+
+        $connection = Application::getConnection();
+
+        foreach ($fields as $name => $field) {
+            if(!\in_array($name, $kFields)) continue;
+            // delete from uf registry
+            if ($field['USER_TYPE']['BASE_TYPE'] === 'enum') {
+                $enumField = new \CUserFieldEnum;
+                $enumField->DeleteFieldEnum($field['ID']);
+            }
+
+            $connection->query("DELETE FROM b_user_field_lang WHERE USER_FIELD_ID = " . $field['ID']);
+            $connection->query("DELETE FROM b_user_field WHERE ID = " . $field['ID']);
+
+            // if multiple - drop utm table
+            if ($field['MULTIPLE'] == 'Y') {
+                $utmTableName = HL\HighloadBlockTable::getMultipleValueTableName($hlblock, $field);
+                $connection->dropTable($utmTableName);
+            }
+        }
+
+        // clear uf cache
+        $managedCache = Application::getInstance()->getManagedCache();
+        if (\CACHED_b_user_field !== false) {
+            $managedCache->cleanDir("b_user_field");
+        }
+
+        return true;
     }
 }
