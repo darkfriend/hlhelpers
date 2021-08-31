@@ -56,6 +56,52 @@ class HLHelpers
     }
 
     /**
+     * Возвращает HL таблицу
+     * @param array $arOrder сортировка
+     * @param array $arFilter фильтры
+     * @param array $arMoreParams остальные параметры select|group|limit|offset|count_total|runtime|data_doubling
+     * @return array
+     */
+    public function getOne($arOrder=[],$arFilter=[],$arMoreParams=[])
+    {
+        $arParams = [];
+        if($arOrder) $arParams['order'] = $arOrder;
+        if($arFilter) $arParams['filter'] = $arFilter;
+        if($arMoreParams) {
+            foreach ($arMoreParams as $k=>$arMoreParam) {
+                $key = \mb_strtolower($k);
+                $arParams[$key] = $arMoreParam;
+            }
+        }
+        return HL\HighloadBlockTable::getList($arParams)->fetch();
+    }
+
+    /**
+     * Проверяет наличие HL таблицы
+     * @param array $arFilter фильтры
+     * @param array $arMoreParams остальные параметры group|runtime|data_doubling
+     * @return bool
+     * @throws \Bitrix\Main\ArgumentException
+     * @throws \Bitrix\Main\ObjectPropertyException
+     * @throws \Bitrix\Main\SystemException
+     */
+    public function exists($arFilter=[],$arMoreParams=[])
+    {
+        $arParams = [];
+        if($arFilter) {
+            $arParams['filter'] = $arFilter;
+        }
+        if($arMoreParams) {
+            foreach ($arMoreParams as $k=>$arMoreParam) {
+                $key = \mb_strtolower($k);
+                $arParams[$key] = $arMoreParam;
+            }
+        }
+        $arParams['select'] = ['ID'];
+        return !empty(HL\HighloadBlockTable::getList($arParams)->fetchRaw());
+    }
+
+    /**
      * Возвращает класс для работы с инфоблоком
      * @param int $hlblockID - идентификатор таблицы HL
      * @return Entity\DataManager|bool
@@ -113,6 +159,19 @@ class HLHelpers
             $arResult[] = $arData;
         }
         return $arResult;
+    }
+
+    /**
+     * @param int $hlblockID идентификатор таблицы HL
+     * @param array $arFilter фильтры
+     * @param array $arMoreParams остальные параметры group|runtime|data_doubling
+     * @return bool
+     */
+    public function existsElement($hlblockID, $arFilter=[], $arMoreParams=[])
+    {
+        if(!$hlblockID) return false;
+        $result = $this->getElementsResource($hlblockID,$arFilter,[],['ID'],$arMoreParams)->fetch();
+        return !empty($result);
     }
 
     /**
