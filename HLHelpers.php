@@ -394,6 +394,43 @@ class HLHelpers
     }
 
     /**
+     * Обновляет поля свойства по кодовому названию поля (UF_*)
+     * @param int $hlblockID идентификатор таблицы HL
+     * @param string $ufName код поля
+     * @param array $arFields поля, которые нужно обновить
+     * @return bool
+     */
+    public function updateFieldByName($hlblockID, $ufName, $arFields)
+    {
+        if (!$hlblockID || !$ufName) return false;
+        $field = \CUserTypeEntity::GetList(
+            [],
+            [
+                'ENTITY_ID' => 'HLBLOCK_' . $hlblockID,
+                'FIELD_NAME' => $ufName
+            ]
+        )->GetNext();
+
+        if(!$field) return false;
+
+        return $this->updateField($hlblockID, $field['ID'], $arFields);
+    }
+
+    /**
+     * Обновляет поля свойства по id поля
+     * @param int $hlblockID идентификатор таблицы HL
+     * @param int $fieldId id поля
+     * @param array $arFields поля, которые нужно обновить
+     * @return bool
+     */
+    public function updateField($hlblockID, $fieldId, $arFields)
+    {
+        if (!$hlblockID || !$fieldId) return false;
+        $oUserTypeEntity = new \CUserTypeEntity();
+        return $oUserTypeEntity->Update($fieldId, $arFields);
+    }
+
+    /**
      * Удаляет HighloadBlock по $hlblockID
      * @param integer $hlblockID - идентификатор HighloadBlock
      * @return \Bitrix\Main\DB\Result|Entity\DeleteResult
