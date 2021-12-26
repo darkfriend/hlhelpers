@@ -399,6 +399,7 @@ class HLHelpers
      * @param string $ufName код поля
      * @param array $arFields поля, которые нужно обновить
      * @return bool
+     * @since 1.0.5
      */
     public function updateFieldByName($hlblockID, $ufName, $arFields)
     {
@@ -422,6 +423,7 @@ class HLHelpers
      * @param int $fieldId id поля
      * @param array $arFields поля, которые нужно обновить
      * @return bool
+     * @since 1.0.5
      */
     public function updateField($hlblockID, $fieldId, $arFields)
     {
