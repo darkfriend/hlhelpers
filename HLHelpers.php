@@ -3,7 +3,7 @@
  * Набор методов для работы с highloadblock Bitrix
  * User: darkfriend <hi@darkfriend.ru>
  * Date: 25.04.2017
- * @version 1.0.4
+ * @version 1.0.5
  */
 
 namespace Darkfriend;

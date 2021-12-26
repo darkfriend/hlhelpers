@@ -8,6 +8,8 @@
     + [Получить все highloadblock](#ListHighloadBlock)
     + [Создать HighloadBlockTable](#CreateHighloadBlock)
     + [Добавить поле в HighloadBlockTable](#AddFieldHighloadBlock)
+    + [Обновить поле в HighloadBlockTable по ID](#UpdateFieldHighloadBlock)
+    + [Обновить поле в HighloadBlockTable по UF_NAME](#UpdateFieldHighloadBlockByUF)
     + [Удалить поле или поля в HighloadBlockTable](#DeleteFieldHighloadBlock)
     + [Удалить HighloadBlockTable](#DeleteHighloadBlock)
 * Работа с элементами
@@ -81,6 +83,60 @@
     print_r($id); // id|false поля
     // если $id === false
     // print_r(HLHelpers::$LAST_ERROR);
+?>
+```
+
+### <a name="UpdateFieldHighloadBlock"></a> Обновить поле в HighloadBlockTable по ID
+
+```php
+<?php
+    use Darkfriend\HLHelpers;
+    $hlblockID = 1;
+    $fieldID = 1;
+    $arField = [
+        'SORT' => '100',
+        'MANDATORY' => 'Y',
+        'SETTINGS' => [
+            'DEFAULT_VALUE' => 'empty',
+        ],
+        'EDIT_FORM_LABEL' => [
+            'ru' => 'Тестовое поле',
+            'en' => 'Test field',
+        ],
+        'LIST_COLUMN_LABEL' => [
+            'ru' => 'Тестовое поле',
+            'en' => 'Test field',
+        ],
+    ];
+    $id = HLHelpers::getInstance()->updateField($hlblockID, $fieldID, $arField);
+    print_r($id); // bool, как результат
+?>
+```
+
+### <a name="UpdateFieldHighloadBlockByUF"></a> Обновить поле в HighloadBlockTable по UF_NAME
+
+```php
+<?php
+    use Darkfriend\HLHelpers;
+    $hlblockID = 1;
+    $ufName = 'UF_TEST';
+    $arField = [
+        'SORT' => '100',
+        'MANDATORY' => 'Y',
+        'SETTINGS' => [
+            'DEFAULT_VALUE' => 'empty',
+        ],
+        'EDIT_FORM_LABEL' => [
+            'ru' => 'Тестовое поле',
+            'en' => 'Test field',
+        ],
+        'LIST_COLUMN_LABEL' => [
+            'ru' => 'Тестовое поле',
+            'en' => 'Test field',
+        ],
+    ];
+    $id = HLHelpers::getInstance()->updateFieldByName($hlblockID, $ufName, $arField);
+    print_r($id); // bool, как результат
 ?>
 ```
 
