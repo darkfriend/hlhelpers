@@ -104,7 +104,7 @@ class HLHelpers
 
     /**
      * Возвращает класс для работы с инфоблоком
-     * @param int $hlblockID - идентификатор таблицы HL
+     * @param int $hlblockID идентификатор таблицы HL
      * @return Entity\DataManager|bool
      */
     public function getEntityTable($hlblockID)
@@ -118,7 +118,7 @@ class HLHelpers
 
     /**
      * Возвращает список пользовательских полей HL таблицы (ключем массива является ID записи)
-     * @param int $hlblockID - идентификатор таблицы HL
+     * @param int $hlblockID идентификатор таблицы HL
      * @return array
      */
     public static function getEntityFields($hlblockID)
@@ -137,10 +137,10 @@ class HLHelpers
 
     /**
      * Возвращает ресурс результата списка элеметнов
-     * @param int $hlblockID - идентификатор таблицы HL
-     * @param array $arFilter - фильтры
-     * @param array $arOrder - сортировка
-     * @param array $arSelect - поля, по умолчанию все
+     * @param int $hlblockID идентификатор таблицы HL
+     * @param array $arFilter фильтры
+     * @param array $arOrder сортировка
+     * @param array $arSelect поля, по умолчанию все
      * @param array $arMoreParams остальные параметры group|limit|offset|runtime|data_doubling
      * @return \Bitrix\Main\DB\Result
      */
@@ -163,10 +163,10 @@ class HLHelpers
 
     /**
      * Возвращает список элементов инфоблока
-     * @param int $hlblockID - идентификатор таблицы HL
-     * @param array $arFilter - фильтры
-     * @param array $arOrder - сортировка
-     * @param array $arSelect - поля, по умолчанию все
+     * @param int $hlblockID идентификатор таблицы HL
+     * @param array $arFilter фильтры
+     * @param array $arOrder сортировка
+     * @param array $arSelect поля, по умолчанию все
      * @param array $arMoreParams остальные параметры group|limit|offset|runtime|data_doubling
      * @return array|bool
      */
@@ -239,8 +239,8 @@ class HLHelpers
 
     /**
      * Создает элемент в хайлоад инфоблоке
-     * @param integer $hlblockID - идентификатор таблицы HL
-     * @param array $arFields - поля
+     * @param integer $hlblockID идентификатор таблицы HL
+     * @param array $arFields поля
      * @return bool|int
      */
     public function addElement($hlblockID, $arFields = [])
@@ -258,8 +258,8 @@ class HLHelpers
 
     /**
      * Удаляет элемент из хайлоад инфоблока
-     * @param integer $hlblockID - идентификатор таблицы HL
-     * @param integer $ID - идентификатор элемента
+     * @param integer $hlblockID идентификатор таблицы HL
+     * @param integer $ID идентификатор элемента
      * @return bool
      */
     public function deleteElement($hlblockID, $ID = null)
@@ -277,9 +277,9 @@ class HLHelpers
 
     /**
      * Обновляет элемент хайлоад инфоблока
-     * @param integer $hlblockID - идентификатор таблицы HL
-     * @param integer $ID - идентификатор элемента
-     * @param array $arFields - обновляемые поля
+     * @param integer $hlblockID идентификатор таблицы HL
+     * @param integer $ID идентификатор элемента
+     * @param array $arFields обновляемые поля
      * @return bool
      */
     public function updateElement($hlblockID, $ID = null, $arFields = [])
@@ -367,9 +367,9 @@ class HLHelpers
 
     /**
      * Создает таблицу для HighloadBlock
-     * @param string $nameHLBlock - название HL-блока, должно начинаться с заглавной буквы и состоять только из латинских букв и цифр
-     * @param string $tableName - название таблицы для HL-блока, должно состоять только из строчных латинских букв, цифр и знака подчеркивания
-     * @return bool|int - id HL-блока
+     * @param string $nameHLBlock название HL-блока, должно начинаться с заглавной буквы и состоять только из латинских букв и цифр
+     * @param string $tableName название таблицы для HL-блока, должно состоять только из строчных латинских букв, цифр и знака подчеркивания
+     * @return bool|int id HL-блока
      */
     public function create($nameHLBlock, $tableName)
     {
@@ -390,8 +390,8 @@ class HLHelpers
 
     /**
      * Добавляет поле в HighloadBlock
-     * @param integer $hlblockID - идентификатор HighloadBlock
-     * @param array $arFields - поля, подробности https://dev.1c-bitrix.ru/learning/course/?COURSE_ID=43&LESSON_ID=3496
+     * @param integer $hlblockID идентификатор HighloadBlock
+     * @param array $arFields поля, подробности https://dev.1c-bitrix.ru/learning/course/?COURSE_ID=43&LESSON_ID=3496
      * @return int
      * @throws $LAST_ERROR
      */
@@ -411,7 +411,7 @@ class HLHelpers
 
     /**
      * Возвращает поля таблица
-     * @param int $hlblockID - идентификатор таблицы HL
+     * @param int $hlblockID идентификатор таблицы HL
      * @return \Bitrix\Main\ORM\Fields\Field[]|bool
      * @since 1.0.2
      */
@@ -465,7 +465,7 @@ class HLHelpers
 
     /**
      * Удаляет HighloadBlock по $hlblockID
-     * @param integer $hlblockID - идентификатор HighloadBlock
+     * @param integer $hlblockID идентификатор HighloadBlock
      * @return \Bitrix\Main\DB\Result|Entity\DeleteResult
      */
     public function deleteHighloadBlock($hlblockID)
@@ -552,7 +552,7 @@ class HLHelpers
             $connection->query("DELETE FROM b_user_field_lang WHERE USER_FIELD_ID = " . $field['ID']);
             $connection->query("DELETE FROM b_user_field WHERE ID = " . $field['ID']);
 
-            // if multiple - drop utm table
+            // if multiple drop utm table
             if ($field['MULTIPLE'] == 'Y') {
                 $utmTableName = HL\HighloadBlockTable::getMultipleValueTableName($hlblock, $field);
                 $connection->dropTable($utmTableName);
