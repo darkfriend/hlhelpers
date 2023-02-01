@@ -143,7 +143,7 @@ class HLHelpers
     }
 
     /**
-     * Возвращает список эдементов инфоблока
+     * Возвращает список элементов инфоблока
      * @param int $hlblockID - идентификатор таблицы HL
      * @param array $arFilter - фильтры
      * @param array $arOrder - сортировка
@@ -279,14 +279,14 @@ class HLHelpers
     /**
      * Возвращает значения поля
      * @param string $fieldName название поля UF_NAME
-     * @param int $fieldID идентификатор значения
+     * @param int $enumId идентификатор значения
      * @return bool|mixed
      */
-    public function getFieldValue($fieldName = '', $fieldID = null)
+    public function getFieldValue($fieldName = '', $enumId = null)
     {
         $arResult = $this->getFieldValuesList([], [
             'USER_FIELD_NAME' => $fieldName,
-            'ID' => $fieldID,
+            'ID' => $enumId,
         ]);
         if ($arResult[0]) {
             return $arResult[0];
