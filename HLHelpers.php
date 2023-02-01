@@ -117,6 +117,25 @@ class HLHelpers
     }
 
     /**
+     * Возвращает список пользовательских полей HL таблицы (ключем массива является ID записи)
+     * @param int $hlblockID - идентификатор таблицы HL
+     * @return array
+     */
+    public static function getEntityFields($hlblockID)
+    {
+        $resUF = \CUserTypeEntity::GetList([], [
+            'ENTITY_ID' => 'HLBLOCK_' . $hlblockID,
+        ]);
+
+        $arResult = [];
+        while ($uf = $resUF->GetNext()) {
+            $arResult[$uf['ID']] = $uf;
+        }
+
+        return $arResult;
+    }
+
+    /**
      * Возвращает ресурс результата списка элеметнов
      * @param int $hlblockID - идентификатор таблицы HL
      * @param array $arFilter - фильтры
@@ -333,6 +352,17 @@ class HLHelpers
         $arResult = $this->getFieldValuesList([], ['USER_FIELD_NAME' => $fieldName, "XML_ID" => $codeName]);
         if ($arResult[0]) return $arResult[0];
         return false;
+    }
+
+    /**
+     * Возвращает все значения поля $fieldId
+     * @param string $fieldId ID поля UF_ID
+     * @param array $arSort сортировка
+     * @return array
+     */
+    public function getFieldValuesByFieldId($fieldId = null, $arSort = ['SORT' => 'ASC'])
+    {
+        return $this->getFieldValuesList($arSort, ['USER_FIELD_ID' => $fieldId]);
     }
 
     /**
