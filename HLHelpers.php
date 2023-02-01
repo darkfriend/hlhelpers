@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Набор методов для работы с highloadblock Bitrix
  * User: darkfriend <hi@darkfriend.ru>
@@ -62,13 +63,13 @@ class HLHelpers
      * @param array $arMoreParams остальные параметры select|group|limit|offset|count_total|runtime|data_doubling
      * @return array
      */
-    public function getOne($arOrder=[],$arFilter=[],$arMoreParams=[])
+    public function getOne($arOrder = [], $arFilter = [], $arMoreParams = [])
     {
         $arParams = [];
-        if($arOrder) $arParams['order'] = $arOrder;
-        if($arFilter) $arParams['filter'] = $arFilter;
-        if($arMoreParams) {
-            foreach ($arMoreParams as $k=>$arMoreParam) {
+        if ($arOrder) $arParams['order'] = $arOrder;
+        if ($arFilter) $arParams['filter'] = $arFilter;
+        if ($arMoreParams) {
+            foreach ($arMoreParams as $k => $arMoreParam) {
                 $key = \mb_strtolower($k);
                 $arParams[$key] = $arMoreParam;
             }
@@ -85,14 +86,14 @@ class HLHelpers
      * @throws \Bitrix\Main\ObjectPropertyException
      * @throws \Bitrix\Main\SystemException
      */
-    public function exists($arFilter=[],$arMoreParams=[])
+    public function exists($arFilter = [], $arMoreParams = [])
     {
         $arParams = [];
-        if($arFilter) {
+        if ($arFilter) {
             $arParams['filter'] = $arFilter;
         }
-        if($arMoreParams) {
-            foreach ($arMoreParams as $k=>$arMoreParam) {
+        if ($arMoreParams) {
+            foreach ($arMoreParams as $k => $arMoreParam) {
                 $key = \mb_strtolower($k);
                 $arParams[$key] = $arMoreParam;
             }
@@ -167,10 +168,10 @@ class HLHelpers
      * @param array $arMoreParams остальные параметры group|runtime|data_doubling
      * @return bool
      */
-    public function existsElement($hlblockID, $arFilter=[], $arMoreParams=[])
+    public function existsElement($hlblockID, $arFilter = [], $arMoreParams = [])
     {
-        if(!$hlblockID) return false;
-        $result = $this->getElementsResource($hlblockID,$arFilter,[],['ID'],$arMoreParams)->fetch();
+        if (!$hlblockID) return false;
+        $result = $this->getElementsResource($hlblockID, $arFilter, [], ['ID'], $arMoreParams)->fetch();
         return !empty($result);
     }
 
@@ -184,7 +185,7 @@ class HLHelpers
      * @throws \Bitrix\Main\SystemException
      * @since 1.0.3
      */
-    public function getTotalCount($hlblockID, $arFilter=[], $cache=[])
+    public function getTotalCount($hlblockID, $arFilter = [], $cache = [])
     {
         $entity = $this->getEntityTable($hlblockID);
         return (int) $entity::getCount($arFilter, $cache);
@@ -412,7 +413,7 @@ class HLHelpers
             ]
         )->GetNext();
 
-        if(!$field) return false;
+        if (!$field) return false;
 
         return $this->updateField($hlblockID, $field['ID'], $arFields);
     }
@@ -465,7 +466,7 @@ class HLHelpers
         $fileFields = [];
         $fields = $USER_FIELD_MANAGER->getUserFields(HL\HighloadBlockTable::compileEntityId($hlblockID));
         foreach ($fields as $name => $field) {
-            if(!\in_array($name, $kFields)) continue;
+            if (!\in_array($name, $kFields)) continue;
             if ($field['USER_TYPE']['BASE_TYPE'] === 'file') {
                 $fileFields[] = $name;
             }
@@ -511,7 +512,7 @@ class HLHelpers
         $connection = Application::getConnection();
 
         foreach ($fields as $name => $field) {
-            if(!\in_array($name, $kFields)) continue;
+            if (!\in_array($name, $kFields)) continue;
             // delete from uf registry
             if ($field['USER_TYPE']['BASE_TYPE'] === 'enum') {
                 $enumField = new \CUserFieldEnum;
